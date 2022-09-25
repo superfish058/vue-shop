@@ -1,0 +1,44 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "1727271",
+      "name": "06商品-线性",
+      "font_class": "shangpin-xianxing",
+      "unicode": "e889",
+      "unicode_decimal": 59529
+    },
+    {
+      "icon_id": "1727360",
+      "name": "25单据-线性",
+      "font_class": "danju-xianxing",
+      "unicode": "e89a",
+      "unicode_decimal": 59546
+    },
+    {
+      "icon_id": "1727368",
+      "name": "28体积、空间-线性",
+      "font_class": "tijikongjian-xianxing",
+      "unicode": "e89f",
+      "unicode_decimal": 59551
+    },
+    {
+      "icon_id": "1727591",
+      "name": "406报表-线性",
+      "font_class": "baobiao-xianxing",
+      "unicode": "e902",
+      "unicode_decimal": 59650
+    },
+    {
+      "icon_id": "4766293",
+      "name": "user",
+      "font_class": "user",
+      "unicode": "e7ae",
+      "unicode_decimal": 59310
+    }
+  ]
+}
