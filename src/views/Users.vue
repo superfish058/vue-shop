@@ -258,6 +258,7 @@
 			dialogReset(formName) {
 				this.$refs[formName].resetFields();
 			}, //重置添加数据
+			//提交表单
 			submitForm() {
 				this.$refs.addFormRef.validate(async valid => {
 					if (valid) {
@@ -277,7 +278,7 @@
 						return
 					}
 				});
-			}, //提交表单
+			}, 
 			showEditDialog(value) {
 				this.editForm = Object.assign({}, value)
 				this.editDialogVisible = true
