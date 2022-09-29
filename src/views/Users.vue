@@ -47,9 +47,11 @@
 							<!-- 删除用户 -->
 							<el-button type="danger" icon="el-icon-delete" size="mini"
 								@click="deleteUserData(scope.row.id)"></el-button>
+							<!-- 分配用户 -->
 							<el-tooltip ffect="dark" content="分配角色" placement="right-end" :enterable="false"
 								transition="none">
-								<el-button type="warning" icon="el-icon-setting" size="mini"></el-button>
+								<el-button type="warning" icon="el-icon-setting" size="mini"
+									@click="setRole(scope.row)"></el-button>
 							</el-tooltip>
 						</template>
 					</el-table-column>
@@ -86,7 +88,7 @@
 			</span>
 		</el-dialog>
 		<!-- 修改对话框 -->
-		<el-dialog title="提示" :visible.sync="editDialogVisible" width="30%" @close="resetEditDialog('editFormRef')">
+		<el-dialog title="提示" :visible.sync="editDialogVisible" width="30%" @close="resetEditDialog()">
 			<el-form :model="editForm" :rules="editFormRules" ref="editFormRef" label-width="70px">
 				<el-form-item label="用户名">
 					<el-input v-model="editForm.username" disabled></el-input>
@@ -103,6 +105,23 @@
 				<el-button type="primary" @click="submitEditForm">确 定</el-button>
 			</span>
 		</el-dialog>
+
+		<!--分配角色权限 -->
+		<el-dialog title="提示" :visible.sync="setRoleVisible" width="30%" @close="roleSelectedId=''">
+			<div>
+				<p>当前用户：{{userInfo.username}}</p>
+				<p>当前角色：{{userInfo.role_name}}</p>
+				<el-select v-model="roleSelectedId" placeholder="请选择" style="margin-top: 5px;" >
+					<el-option v-for="item in rolesList" :key="item.id" :label="item.roleName" :value="item.id">
+					</el-option>
+				</el-select>
+			</div>
+			<span slot="footer">
+				<el-button @click="setRoleVisible = false">取 消</el-button>
+				<el-button type="primary" @click="getNewRole()">确 定</el-button>
+			</span>
+		</el-dialog>
+
 	</div>
 </template>
 <script>
@@ -132,6 +151,7 @@
 			} //手机号验证规则
 			return {
 				userData: [], //用户数据
+				rolesList: [], //角色列表
 				userQuery: {
 					query: '',
 					pagenum: 1,
@@ -140,6 +160,9 @@
 				total: 0, //用户总数
 				addDialogVisible: false, //添加对话框展示
 				editDialogVisible: false, //修改对话框展示
+				setRoleVisible: false, //分配角色对话框展示
+				userInfo: {},//分配角色用户数据
+				roleSelectedId:'',//被选中角色id
 				addForm: {
 					username: '',
 					password: '',
@@ -278,15 +301,14 @@
 						return
 					}
 				});
-			}, 
+			},
 			showEditDialog(value) {
 				this.editForm = Object.assign({}, value)
 				this.editDialogVisible = true
 			},
 			//重置编辑对话框
-			resetEditDialog(formName) {
+			resetEditDialog() {
 				this.editForm = {}
-				this.$refs[formName].resetFields()
 			},
 			//提交编辑表单
 			submitEditForm() {
@@ -311,6 +333,12 @@
 					}
 				});
 			},
+			//获取角色列表
+			getRolesList() {
+				this.$https.get('roles').then(res => {
+					this.rolesList = res.data.data
+				})
+			},
 			//删除用户数据
 			deleteUserData(id) {
 				this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
@@ -318,14 +346,14 @@
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
-					this.$https.delete('users/'+id).then(res =>{
-						if(res.data.meta.status==200){
+					this.$https.delete('users/' + id).then(res => {
+						if (res.data.meta.status == 200) {
 							this.$message({
 								type: 'success',
 								message: '删除成功!'
 							})
 							this.getUserData()
-						}else{
+						} else {
 							this.$message.error('删除失败')
 						}
 					})
@@ -336,6 +364,24 @@
 					});
 				});
 			},
+			//分配角色
+			setRole(user) {
+				this.userInfo = user
+				this.setRoleVisible = true
+				this.getRolesList()
+			},
+			getNewRole(){
+				this.$https.put(`users/${this.userInfo.id}/role`,{rid:this.roleSelectedId}).then(res => {
+					console.log(res);
+					if(res.data.meta.status == 200){
+						this.$message.success('分配角色成功')
+						this.getUserData()
+					}else{
+						this.$message.error('分配角色失败')
+					}
+					this.setRoleVisible = false
+				})
+			}
 		}
 	}
 </script>

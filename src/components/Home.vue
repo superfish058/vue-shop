@@ -1,8 +1,8 @@
 <template>
 	<div>
-		<el-container style="height: 100vh;width: 100vw;">
+		<el-container style="height: 100vh;width: 100%;">
 			<!-- 表头部分 -->
-			<el-header style="background-color: #363d40;">
+			<el-header style="background-color: #363d40;height: 8vh;">
 				<!-- 系统名称 -->
 				<div class="left">
 					<div class="img">
@@ -17,7 +17,7 @@
 					<el-button @click="logout" size="small">登出</el-button>
 				</div>
 			</el-header>
-			<el-container>
+			<el-container style="height: 92vh;">
 				<!-- 侧边栏部分 -->
 				<el-aside style="background-color: #313743;" :width="asideWidth" >
 					<div class="sliderBar">
@@ -37,13 +37,13 @@
 							<el-menu-item :index="subItem.path+''" v-for="subItem in item.children" :key="subItem.id">
 								<template slot="title">
 									<i class="el-icon-menu"></i>
-									<span>{{subItem.id}}</span>
+									<span>{{subItem.authName}}</span>
 								</template>
 							</el-menu-item>
 						</el-submenu>
 					</el-menu>
 				</el-aside>
-				<el-main style="background-color: #e9edf1;">
+				<el-main style="background-color: #e9edf1;height: 100%;" >
 					<router-view></router-view>
 				</el-main>
 			</el-container>
@@ -105,7 +105,6 @@
 		.el-header {
 			padding: 0;
 			display: flex;
-
 			.left {
 				height: 100%;
 				display: flex;
